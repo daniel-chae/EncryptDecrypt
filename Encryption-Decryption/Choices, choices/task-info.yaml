@@ -1,0 +1,144 @@
+type: edu
+custom_name: stage6
+files:
+- name: test/EncryptDecryptTest.java
+  visible: false
+  learner_created: false
+- name: src/encryptdecrypt/Main.java
+  visible: true
+  text: |
+    package encryptdecrypt;
+
+    import java.io.*;
+    import java.nio.file.Files;
+    import java.nio.file.Paths;
+
+    public class Main {
+        public static void main(String[] args) {
+            String mode = null;
+            int shift = 0;
+            String rawString = null;
+            String out = null;
+            String fileString = null;
+
+            for (int i = 0; i < args.length; i++){
+                switch (args[i]){
+                    case "-mode":
+                        if (args[i+1].equals("dec")){
+                            mode = "dec";
+                        } else {
+                            mode = "enc";
+                        }
+                        break;
+                    case "-key":
+                        shift = Integer.parseInt(args[i+1]);
+                        break;
+                    case "-data":
+                        rawString = args[i+1];
+                        break;
+                    case "-in":
+                        try{
+                            fileString = new String(Files.readAllBytes(Paths.get(args[i+1])));
+                        } catch (IOException e){
+                            e.getMessage();
+                        }
+                        break;
+                    case "-out":
+                        out = args[i+1];
+                    default:
+                        break;
+                }
+            }
+            char[] charSet = null;
+
+            if (rawString == null && fileString == null){
+                rawString = "";
+                charSet = rawString.toCharArray();
+            } else if (rawString != null){
+                charSet = rawString.toCharArray();
+            } else {
+                charSet = fileString.toCharArray();
+            }
+
+            if (mode.equals("enc")){
+                encrypt(charSet, shift, out);
+            } else {
+                decrypt(charSet, shift, out);
+            }
+        }
+
+        public static void encrypt (char[] charset, int shift, String out){
+            char[] resultSet = new char[charset.length];
+            int encrypted = 0;
+            for (int i=0; i<charset.length; i++){
+                encrypted = (int)charset[i] + shift % 127;
+                resultSet[i] = (char)encrypted;
+            }
+            if (out == null) {
+                System.out.println(resultSet);
+            } else {
+                File file = new File(out);
+                try (PrintWriter printWriter = new PrintWriter(file)){
+                    for (char ch: resultSet){
+                        printWriter.print(ch);
+                    }
+                } catch (FileNotFoundException e){
+                    e.getMessage();
+                }
+            }
+        }
+
+        public static void decrypt (char[] charSet, int shift, String out) {
+            char[] resultSet = new char[charSet.length];
+            int decrypted = 0;
+            for (int i = 0; i < charSet.length; i++) {
+                decrypted = (int) charSet[i] - shift % 127;
+                if (decrypted > -1) {
+                    resultSet[i] = (char) decrypted;
+                } else {
+                    resultSet[i] = (char) (128 + decrypted);
+                }
+            }
+            if (out == null) {
+                System.out.println(resultSet);
+            } else {
+                File file = new File(out);
+                try (PrintWriter printWriter = new PrintWriter(file)) {
+                    for (char ch : resultSet) {
+                        printWriter.print(ch);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.getMessage();
+                }
+            }
+        }
+    }
+  learner_created: false
+- name: output.txt
+  visible: true
+  text: 111122223333
+  learner_created: false
+- name: src/encryptdecrypt/ShiftEncryptor.java
+  visible: true
+  learner_created: true
+- name: src/encryptdecrypt/UnicodeEncryptor.java
+  visible: true
+  learner_created: true
+- name: src/encryptdecrypt/ShiftDecryptor.java
+  visible: true
+  learner_created: true
+- name: src/encryptdecrypt/UnicodeDecryptor.java
+  visible: true
+  learner_created: true
+- name: src/encryptdecrypt/CryptoShop.java
+  visible: true
+  learner_created: true
+- name: src/encryptdecrypt/CryptoFactory.java
+  visible: true
+  learner_created: true
+- name: src/encryptdecrypt/Cryptor.java
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/projects/46/stages/250/implement
+status: Solved
+record: -1

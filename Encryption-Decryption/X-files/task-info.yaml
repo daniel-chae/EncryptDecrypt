@@ -1,0 +1,78 @@
+type: edu
+custom_name: stage5
+files:
+- name: test/EncryptDecryptTest.java
+  visible: false
+  learner_created: false
+- name: src/encryptdecrypt/Main.java
+  visible: true
+  text: |
+    package encryptdecrypt;
+
+    public class Main {
+        public static void main(String[] args) {
+            String mode = null;
+            int shift = 0;
+            String rawString = null;
+
+            for (int i = 0; i < args.length; i++){
+                switch (args[i]){
+                    case "-mode":
+                        if (args[i+1].equals("dec")){
+                            mode = "dec";
+                        } else {
+                            mode = "enc";
+                        }
+                        break;
+                    case "-key":
+                        shift = Integer.parseInt(args[i+1]);
+                        break;
+                    case "-data":
+                        rawString = args[i+1];
+                        break;
+                }
+            }
+
+            char[] charSet = rawString.toCharArray();
+
+            if (mode.equals("enc")){
+                System.out.println(encrypt(charSet, shift));
+            } else {
+                System.out.println(decrypt(charSet, shift));
+            }
+        }
+
+        public static char[] encrypt (char[] charset, int shift){
+            char[] resultSet = new char[charset.length];
+            int encrypted = 0;
+
+            for (int i=0; i<charset.length; i++){
+                encrypted = (int)charset[i] + shift % 127;
+                resultSet[i] = (char)encrypted;
+            }
+            return resultSet;
+        }
+
+        public static char[] decrypt (char[] charSet, int shift){
+            char[] resultSet = new char[charSet.length];
+            int decrypted = 0;
+
+            for (int i=0; i<charSet.length; i++){
+                decrypted = (int)charSet[i] - shift % 127;
+
+                if (decrypted > -1){
+                    resultSet[i] = (char)decrypted;
+                } else {
+                    resultSet[i] = (char)(128 + decrypted);
+                }
+            }
+            return resultSet;
+        }
+    }
+  learner_created: false
+- name: output.txt
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/projects/46/stages/249/implement
+status: Solved
+record: 2

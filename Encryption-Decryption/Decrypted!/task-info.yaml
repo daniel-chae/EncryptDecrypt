@@ -1,0 +1,41 @@
+type: edu
+custom_name: stage3
+files:
+- name: test/EncryptDecryptTest.java
+  visible: false
+  learner_created: false
+- name: src/encryptdecrypt/Main.java
+  visible: true
+  text: |
+    package encryptdecrypt;
+    import java.util.Scanner;
+
+    public class Main {
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine();
+            int shift = scanner.nextInt();
+            char[] charSet = input.toCharArray();
+            char[] resultSet = new char[input.length()];
+
+            for (int i=0; i<input.length(); i++){
+                if (Character.isWhitespace(charSet[i])){
+                    resultSet[i] = ' ';
+                } else {
+                    int temp = (int)charSet[i] + shift;
+                    if (temp > 122){
+                        resultSet[i] = (char)(temp % 122 + 96);
+                    } else {
+                        int temp2 = (int)charSet[i] + shift;
+                        resultSet[i] = (char)temp2;
+                    }
+                }
+            }
+
+            System.out.println(String.valueOf(resultSet));
+        }
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/projects/46/stages/247/implement
+status: Unchecked
+record: 5
